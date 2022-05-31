@@ -44,7 +44,7 @@ static const AudioRendererConfig arConfig =
     };
 
 static int
-SWITCHAUDIO_OpenDevice(_THIS, void *handle, const char *devname, int iscapture)
+SWITCHAUDIO_OpenDevice(_THIS, const char *devname)
 {
     static const u8 sink_channels[] = {0, 1};
     SDL_bool supported_format = SDL_FALSE;
@@ -205,7 +205,7 @@ SWITCHAUDIO_ThreadInit(_THIS)
 
 }
 
-static int
+static SDL_bool
 SWITCHAUDIO_Init(SDL_AudioDriverImpl *impl)
 {
     impl->OpenDevice = SWITCHAUDIO_OpenDevice;
@@ -215,7 +215,7 @@ SWITCHAUDIO_Init(SDL_AudioDriverImpl *impl)
     impl->CloseDevice = SWITCHAUDIO_CloseDevice;
     impl->ThreadInit = SWITCHAUDIO_ThreadInit;
 
-    impl->OnlyHasDefaultOutputDevice = 1;
+    impl->OnlyHasDefaultOutputDevice = SDL_TRUE;
 
     return 1;
 }
