@@ -45,13 +45,14 @@ SDL_TicksQuit(void)
     started = false;
 }
 
-Uint32 SDL_GetTicks(void)
+Uint64
+SDL_GetTicks64(void)
 {
     if (!started) {
         SDL_TicksInit();
     }
 
-    return (Uint32) ((SDL_GetPerformanceCounter() - start) * 1000 / SDL_GetPerformanceFrequency());
+    return (SDL_GetPerformanceCounter() - start) * 1000 / SDL_GetPerformanceFrequency();
 }
 
 Uint64
