@@ -1,18 +1,10 @@
 /*
-Copyright 1997-2022 Sam Lantinga
+Copyright 1997-2023 Sam Lantinga
 Copyright 2022 Collabora Ltd.
 SPDX-License-Identifier: Zlib
 */
 
 #include "testutils.h"
-
-#if defined(SDL_FILESYSTEM_OS2) || defined(SDL_FILESYSTEM_WINDOWS)
-static const char pathsep[] = "\\";
-#elif defined(SDL_FILESYSTEM_RISCOS)
-static const char pathsep[] = ".";
-#else
-static const char pathsep[] = "/";
-#endif
 
 /*
  * Return the absolute path to def in the SDL_GetBasePath() if possible, or
@@ -31,7 +23,7 @@ GetNearbyFilename(const char *file)
 
     if (base != NULL) {
         SDL_RWops *rw;
-        size_t len = SDL_strlen(base) + SDL_strlen(pathsep) + SDL_strlen(file) + 1;
+        size_t len = SDL_strlen(base) + SDL_strlen(file) + 1;
 
         path = SDL_malloc(len);
 
@@ -41,7 +33,7 @@ GetNearbyFilename(const char *file)
             return NULL;
         }
 
-        SDL_snprintf(path, len, "%s%s%s", base, pathsep, file);
+        SDL_snprintf(path, len, "%s%s", base, file);
         SDL_free(base);
 
         rw = SDL_RWFromFile(path, "rb");
@@ -151,9 +143,7 @@ LoadTexture(SDL_Renderer *renderer, const char *file, SDL_bool transparent,
             SDL_LogError(SDL_LOG_CATEGORY_APPLICATION, "Couldn't create texture: %s\n", SDL_GetError());
         }
     }
-    if (temp) {
-        SDL_FreeSurface(temp);
-    }
+    SDL_FreeSurface(temp);
     if (path) {
         SDL_free(path);
     }
